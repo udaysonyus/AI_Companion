@@ -1,16 +1,18 @@
 
+const { default: mongoose } = require('mongoose');
 const Thread = require('../models/threadModel');
 
 const createThread = async (req, res) => {
 
   try {
 
-    const {userId, title} = req.body;
+    const {title} = req.body;
 
-    if (!userId || !title) {
-      return res.status(400).json({message: "User Id and Title are required"});
+    if (!title) {
+      return res.status(400).json({message: "Title are required"});
     }
 
+    const userId = new mongoose.Types.ObjectId().toHexString();
     const newThread = await Thread.create({userId, title});
 
     res.status(201).json({
