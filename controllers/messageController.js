@@ -1,15 +1,17 @@
+const { default: mongoose } = require('mongoose');
 const messages = require('../models/messageModel')
 
 const addMessage = async (req, res) => {
 
   try {
 
-    const {threadId, sender, text} = req.body;
+    const {sender = "user", text} = req.body;
 
-    if (!threadId || !sender || !text) {
-      return res.status(400).json({message: "ThreadID, sender and Text informations are required"})
+    if (!text) {
+      return res.status(400).json({message: "Text informations are required"})
     };
 
+    const threadId = new mongoose.Types.ObjectId().toHexString();
     const added_message = await messages.create({threadId, sender, text});
 
     res.status(201).json({
